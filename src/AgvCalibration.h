@@ -1,11 +1,15 @@
+/*
+ * @Author: chending2020529 chending529@gmail.com
+ * @Date: 2023-03-13 20:41:27
+ * @LastEditors: chending2020529 chending529@gmail.com
+ * @LastEditTime: 2023-03-13 20:52:46
+ * @FilePath: /LearningOpenCV/src/AgvCalibration.h
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <string>
-#include "TagShow.h"
 #include <iostream>
-// #include <eigen3/Eigen/Dense>
-// #include <eigen3/Eigen/Core>
-// #include <opencv2/core/eigen.hpp>
 
 using namespace std;
 using namespace cv;
@@ -16,10 +20,6 @@ public:
     AgvCalibration(double atsize, std::string tagtype);
     ~AgvCalibration();
 
-    /*
-    boardSize: the number of inner corner of chessboard (row and coulum)
-    boardSquareLength: side length of grid (m) 
-    */
     void cameraUSB(int camera_index, 
                    cv::Size board_size,
                    string image_type);
@@ -43,11 +43,6 @@ public:
                     cv::Size2f boardSquareLenth,
                     cv::Mat &camera_matrix,
                     cv::Mat &camera_distortion);
-
-    bool AprilTagDetection(TagShow &ts, 
-                           cv::Mat &atimg, 
-                           std::pair<float, float> &imageCenter, 
-                           int index);
 
     bool extriCalib(std::vector<Mat> aprTagImages, 
                     std::vector<cv::Point3f> objPosition, 

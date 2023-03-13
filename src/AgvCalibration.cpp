@@ -74,24 +74,6 @@ void AgvCalibration::cameraUSB(int camera_index,
                     std::cout << "can not find corners！！！！！ \n";
                 }
             }
-
-            if (image_type == "apriltag")
-            {
-                cv::Mat intrixMatrix, distCoff;
-                intrixMatrix = (Mat_<float>(3, 3) << 537.90, 0, 308.22,
-                                0, 540.89, 245.54,
-                                0, 0, 1);
-                distCoff = (Mat_<float>(1, 5) << 0.0170, 0.1592, -0.00096,
-                            0.00250, 0);
-                std::pair<float, float> tc;
-                TagShow tagshow(intrixMatrix, distCoff, aprilTagSize, tagType);
-                if (tagshow.processImage(frame))
-                {
-                    std::string imageName;
-                    imageName = "../resource/apriltag/apriltag" + std::to_string(++number) + ".jpg";
-                    cv::imwrite(imageName, frame);
-                }
-            }
         }
 
         if (key == 27) // click "esc" to close video
@@ -328,74 +310,6 @@ void AgvCalibration::intriCalib(std::vector<cv::Mat> chess_board_imgs,
 
     std::cout << std::endl
               << "total rp error: " << total_err / num_of_images << "pixel" << std::endl;
-}
-
-bool AgvCalibration::AprilTagDetection(TagShow &ts,
-                                       cv::Mat &atimg,
-                                       std::pair<float, float> &imageCenter,
-                                       int index)
-{
-    bool flag = ts.processImage(atimg);
-    if (!flag)
-    {
-        std::cout << "could not find aprilTag in image " << index << endl;
-        return flag;
-    }
-    auto vecpos = ts.getCamMatrix();
-    imageCenter = ts.getTagCenter();
-    imwrite("../resource/result/" + to_string(index) + ".jpg", atimg);
-    Vector6d poscam = vecpos[0];
-
-    cv::waitKey(10);
-    return flag;
-}
-
-bool AgvCalibration::extriCalib(std::vector<Mat> aprTagImages,
-                                std::vector<cv::Point3f> objPosition,
-                                cv::Mat intrixMatrix,
-                                cv::Mat distCoff,
-                                std::vector<Point2f> &tagCenters,
-                                cv::Mat &rotation,
-                                cv::Mat &transaction)
-{
-    int count = 0;
-    if (aprTagImages.size() != objPosition.size())
-    {
-        std::cout << "error input image or pose!" << std::endl;
-        return false;
-    }
-    if (intrixMatrix.empty() || distCoff.empty())
-    {
-        std::cout << "without camera intrinsic parameters!" << std::endl;
-    }
-
-    TagShow tagshow(intrixMatrix, distCoff, aprilTagSize, tagType);
-
-    std::pair<float, float> tc;
-    std::vector<Point3f> objPos;
-    std::cout << "start tag detection" << std::endl;
-    for (int i = 0; i < aprTagImages.size(); i++)
-    {
-        cv::Mat img = aprTagImages[i];
-        cv::Point2f tagcenter;
-        cv::Point3f objp = objPosition[i];
-        if (AprilTagDetection(tagshow, img, tc, i))
-        {
-            tagcenter.x = tc.first;
-            tagcenter.y = tc.second;
-            tagCenters.push_back(tagcenter);
-            objPos.push_back(objp);
-            count++;
-        }
-    }
-    std::cout << "the number of useful images: " << count << std::endl;
-    cv::solvePnP(objPos, tagCenters, intrixMatrix, distCoff, rotation, transaction, 0, cv::SOLVEPNP_ITERATIVE);
-    cv::Rodrigues(rotation, rotation);
-
-    invert(rotation, rotation);
-    transaction = -rotation * transaction;
-
-    return false;
 }
 
 void AgvCalibration::cameraMatrixDoubleToFloat(cv::Mat &camera_matrix,
