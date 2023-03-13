@@ -1,8 +1,8 @@
 /*
  * @Author: chending chending2@seer-group.com
  * @Date: 2023-03-08 10:06:22
- * @LastEditors: chending2020529 chending529@gmail.com
- * @LastEditTime: 2023-03-13 21:25:37
+ * @LastEditors: chending chending2@seer-group.com
+ * @LastEditTime: 2023-03-13 22:04:32
  * @FilePath: /Calibrate2D/src/main.cpp
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,7 +16,7 @@ int main()
 {
     Cameras cam;
     cv::Mat image;
-    cam.cameraUSB(2, image);
+    cam.cameraUSB(0, image);
     // AgvCalibration agv(0.321, "36h11");
 
     // /*  grab and save image  */

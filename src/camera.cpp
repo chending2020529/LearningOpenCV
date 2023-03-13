@@ -1,8 +1,8 @@
 /*
  * @Author: chending2020529 chending529@gmail.com
  * @Date: 2023-03-13 20:56:17
- * @LastEditors: chending2020529 chending529@gmail.com
- * @LastEditTime: 2023-03-13 21:58:39
+ * @LastEditors: chending chending2@seer-group.com
+ * @LastEditTime: 2023-03-13 22:21:58
  * @FilePath: /LearningOpenCV/src/camera.cpp
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -36,81 +36,55 @@ void Cameras::cameraUSB(int camera_index, cv::Mat &image)
         captrue >> frame;
         cv::imshow("USB-camera", frame);
 
-        char key = static_cast<char>(cv::waitKey(10)); // fps:10
-        // if (key == 32)                                 // click " " to save image
-        // {
-        //     std::vector<cv::Point2f> image_points;
-        //     cv::Size board_size;
-        //     bool found_chessboard = cv::findChessboardCorners(frame, board_size, image_points,
-        //                                                         cv::CALIB_CB_FAST_CHECK /*| cv::CALIB_CB_ADAPTIVE_THRESH
-        //                                                         | cv::CALIB_CB_NORMALIZE_IMAGE*/
-        //     );
-        //     if (found_chessboard)
-        //     {
-        //         std::string current_time;
-        //         getCurrentTime(current_time);
-        //         std::string image_name;
-        //         image_name = "../resource/chessboard/chess_" + current_time + std::to_string(++number) + ".jpg";
-        //         std::cout << "find corners success.........." << std::endl;
-        //         cv::imwrite(image_name, frame);
-        //     }
-        //     else
-        //     {
-        //         std::cout << "can not find corners!!!!!! \n";
-        //     }
-        // }
-
-        if (key == 27) // click "esc" to close video
+        char key = static_cast<char>(cv::waitKey(10));                                                              //> fps:10
+        if (key == 32)                                                                                              //!> 按空格键保存图片
         {
-            break; // 关闭视频
+            std::string current_time;
+            getCurrentTime(current_time);
+            std::string image_name;
+            image_name = "../resource/image-" + current_time + ".jpg";
+            std::cout << "图片" << ++number << "保存成功......" << std::endl;
+            cv::imwrite(image_name, frame);
+        }
+
+        if (key == 27)                                                                                              //!> 按esc键退出视频
+        {
+            break;                                                                                                  //> 关闭视频
         }
     }
-    cv::destroyWindow("video");
+    cv::destroyWindow("USB-camera");
 }
 
 void Cameras::cameraRTSP(std::string IP, cv::Mat &image)
 {
     cv::VideoCapture captrue(IP);
     if (false == captrue.isOpened())
-        std::cout << "can not find video....." << std::endl;
+        std::cout << "can not find IP-camera....." << std::endl;
     else
-        std::cout << "video is working....." << std::endl;
+        std::cout << "IP-camera is working....." << std::endl;
 
     cv::Mat frame;
     int number = 0;
-    cv::namedWindow("video");
+    cv::namedWindow("IP-camera");
     while (true)
     {
         captrue >> frame;
-        cv::imshow("video", frame);
+        cv::imshow("IP-camera", frame);
 
-        char key = static_cast<char>(cv::waitKey(10)); // fps:10
-        // if (key == 32)                                 // click " " to save image
-        // {
-        //     if (image_type == "chessboard")
-        //     {
-        //         std::vector<cv::Point2f> image_points;
-        //         bool found_chessboard = cv::findChessboardCorners(frame, board_size, image_points,
-        //                                                           cv::CALIB_CB_FAST_CHECK);
-        //         if (found_chessboard)
-        //         {
-        //             std::string current_time;
-        //             getCurrentTime(current_time);
-        //             std::string image_name;
-        //             image_name = "../resource/chessboard/chessboard-" + std::to_string(++number) + ".jpg";
-        //             std::cout << "picture " << std::to_string(number) << " find corners success.........." << std::endl;
-        //             cv::imwrite(image_name, frame);
-        //         }
-        //         else
-        //         {
-        //             std::cout << "can not find corners！！！！！ \n";
-        //         }
-        //     }
-        // }
+        char key = static_cast<char>(cv::waitKey(10));                                                             // fps:10
+        if(key == 32)                                                                                             //!> 按空格键保存图片
+        {
+            std::string current_time;
+            getCurrentTime(current_time);
+            std::string image_name;
+            image_name = "../resource/image-" + current_time + ".jpg";
+            std::cout << "图片保存成功......" << std::endl;
+            cv::imwrite(image_name, frame);
+        }
 
-        if (key == 27) // click "esc" to close video
-            break;     // 关闭视频
+        if (key == 27)                                                                                            //!> 按esc键退出视频
+            break;                                                                                                //> 关闭视频
     }
 
-    cv::destroyWindow("video");
+    cv::destroyWindow("IP-camera");
 }
