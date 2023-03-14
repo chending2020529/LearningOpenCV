@@ -2,7 +2,7 @@
  * @Author: chending2020529 chending529@gmail.com
  * @Date: 2023-03-13 20:41:27
  * @LastEditors: chending2020529 chending529@gmail.com
- * @LastEditTime: 2023-03-13 20:52:46
+ * @LastEditTime: 2023-03-13 23:11:04
  * @FilePath: /LearningOpenCV/src/AgvCalibration.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -17,17 +17,6 @@ using namespace cv;
 class AgvCalibration
 {
 public:
-    AgvCalibration(double atsize, std::string tagtype);
-    ~AgvCalibration();
-
-    void cameraUSB(int camera_index, 
-                   cv::Size board_size,
-                   string image_type);
-
-    void cameraIP(string IP, 
-                  cv::Size board_size,
-                  string image_type);
-
     void imageToVector(int image_num, 
                        string image_path, 
                        string image_name, 
